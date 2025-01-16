@@ -3,47 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EmailJS Example</title>
-    <!-- Include EmailJS SDK -->
+    <title>Send Email with EmailJS</title>
     <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
-    <script type="text/javascript">
-      // Initialize EmailJS with your user ID
-      (function() {
-        emailjs.init("service_r5djl3f"); // Replace with your EmailJS user ID
-      })();
-    </script>
 </head>
 <body>
 
-    <h1>Send Email using EmailJS</h1>
+    <h2>Contact Us</h2>
     <form id="email-form">
-        <input type="text" id="from_name" placeholder="Your Name" required />
-        <input type="email" id="reply_to" placeholder="Your Email" required />
-        <textarea id="message" placeholder="Your Message" required></textarea>
-        <button type="button" onclick="sendEmail()">Send Email</button>
+        <label for="from_name">Your Name:</label>
+        <input type="text" id="from_name" name="from_name" required><br><br>
+
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" rows="4" required></textarea><br><br>
+
+        <label for="reply_to">Your Email:</label>
+        <input type="email" id="reply_to" name="reply_to" required><br><br>
+
+        <button type="submit">Send Email</button>
     </form>
 
     <script type="text/javascript">
-      // Function to send email
-      function sendEmail() {
-        // Prepare the parameters for the email
-        var params = {
-          to_name: "Recipient Name", // Replace with recipient's name
-          from_name: document.getElementById("from_name").value,
-          message: document.getElementById("message").value,
-          reply_to: document.getElementById("reply_to").value
-        };
+        // Initialize EmailJS
+        (function() {
+            emailjs.init("service_r5djl3f");  // Replace with your EmailJS user ID
+        })();
 
-        // Send email using EmailJS
-        emailjs.send("service_r5djl3f", "template_o9wgp9j", params) // Replace with your service and template IDs
-          .then(function(response) {
-            console.log("Success:", response);
-            alert("Email sent successfully!");
-          }, function(error) {
-            console.log("Error:", error);
-            alert("There was an error sending the email.");
-          });
-      }
+        // Form submission handler
+        document.getElementById('email-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Collect form data
+            const formData = new FormData(this);
+
+            // Prepare the email sending function
+            const sendEmail = async () => {
+                try {
+                    // Sending the email using EmailJS service
+                    const response = await emailjs.sendForm("service_r5djl3f", "template_o9wgp9j", formData);
+                    console.log("Email sent successfully:", response);
+                    alert("Your email was sent successfully!");
+                    document.getElementById('email-form').reset(); // Reset the form
+                } catch (error) {
+                    console.error("Failed to send email:", error);
+                    alert("There was an error sending your email. Please try again later.");
+                }
+            };
+
+            // Call the email sending function
+            sendEmail();
+        });
     </script>
 
 </body>
