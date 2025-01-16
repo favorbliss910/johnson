@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Circular Progress Bar with Animation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .progress-container {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .progress-bar {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px;
+    }
+
+    .circle {
+      transform: rotate(-90deg);
+    }
+
+    .background {
+      opacity: 0.3;
+    }
+
+    .foreground {
+      transition: stroke-dashoffset 1s ease-in-out;
+      animation: progressAnimation 2s forwards;
+    }
+
+    .percentage {
+      position: absolute;
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    @keyframes progressAnimation {
+      0% {
+        stroke-dashoffset: 565.48;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .progress-bar {
+        width: 150px;
+        height: 150px;
+      }
+
+      .percentage {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-container">
+    <div class="progress-bar" data-progress="75">
+      <svg class="circle" width="200" height="200">
+        <circle class="background" cx="100" cy="100" r="90" stroke="#e6e6e6" stroke-width="15" fill="none" />
+        <circle class="foreground" cx="100" cy="100" r="90" stroke="#4caf50" stroke-width="15" fill="none" stroke-dasharray="565.48" stroke-dashoffset="0" />
+      </svg>
+      <div class="percentage"></div>
+    </div>
+
+    <div class="progress-bar" data-progress="50">
+      <svg class="circle" width="200" height="200">
+        <circle class="background" cx="100" cy="100" r="90" stroke="#e6e6e6" stroke-width="15" fill="none" />
+        <circle class="foreground" cx="100" cy="100" r="90" stroke="#f39c12" stroke-width="15" fill="none" stroke-dasharray="565.48" stroke-dashoffset="0" />
+      </svg>
+      <div class="percentage"></div>
+    </div>
+
+    <div class="progress-bar" data-progress="30">
+      <svg class="circle" width="200" height="200">
+        <circle class="background" cx="100" cy="100" r="90" stroke="#e6e6e6" stroke-width="15" fill="none" />
+        <circle class="foreground" cx="100" cy="100" r="90" stroke="#e74c3c" stroke-width="15" fill="none" stroke-dasharray="565.48" stroke-dashoffset="0" />
+      </svg>
+      <div class="percentage"></div>
+    </div>
+
+    <div class="progress-bar" data-progress="90">
+      <svg class="circle" width="200" height="200">
+        <circle class="background" cx="100" cy="100" r="90" stroke="#e6e6e6" stroke-width="15" fill="none" />
+        <circle class="foreground" cx="100" cy="100" r="90" stroke="#3498db" stroke-width="15" fill="none" stroke-dasharray="565.48" stroke-dashoffset="0" />
+      </svg>
+      <div class="percentage"></div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.progress-bar').forEach(function(bar) {
+      const progress = bar.getAttribute('data-progress');
+      const circle = bar.querySelector('.foreground');
+      const radius = circle.r.baseVal.value;
+      const circumference = 2 * Math.PI * radius;
+
+      const offset = circumference - (progress / 100) * circumference;
+      circle.style.strokeDashoffset = offset;
+
+      const percentage = bar.querySelector('.percentage');
+      percentage.textContent = progress + '%';
+    });
+  </script>
+</body>
+</html>
